@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.algaworks.socialbooks.domain.Comentario;
 import com.algaworks.socialbooks.domain.Livro;
 import com.algaworks.socialbooks.service.LivroService;
 import com.algaworks.socialbooks.services.exception.LivroNaoEncontradoException;
@@ -57,6 +58,22 @@ public class LivrosResources {
 		livrosService.alterar(livro);
 		
 		return ResponseEntity.noContent().build();
+	}
+	
+	@RequestMapping(value="/{id}/comentarios",method=RequestMethod.POST)
+	public ResponseEntity<Void> adicionarComentario(@PathVariable("id") Long idLivro, @RequestBody Comentario comentario){
+		livrosService.salvarComentario(idLivro, comentario);
+		
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
+		return ResponseEntity.created(uri).build();
+		
+	}
+	
+	@RequestMapping(value="/{id}/comentarios",method=RequestMethod.GET)
+	public ResponseEntity<List<Comentario>> listarComentariosPorLivro(@PathVariable("id")Long idLivro){
+		List<Comentario> listaComentarios = livrosService.listarComentarios(idLivro);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(listaComentarios);
 	}
 	
 }
