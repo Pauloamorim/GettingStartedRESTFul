@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.algaworks.socialbooks.domain.Livro;
-import com.algaworks.socialbooks.repository.LivrosRepository;
 import com.algaworks.socialbooks.service.LivroService;
 import com.algaworks.socialbooks.services.exception.LivroNaoEncontradoException;
 
@@ -42,33 +41,20 @@ public class LivrosResources {
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> buscar(@PathVariable("id") Long id){
-		Livro livro = null;
-		try {
-			livro = livrosService.obter(id);
-		} catch (LivroNaoEncontradoException e) {
-			return ResponseEntity.notFound().build();
-		}
+		Livro livro = livrosService.obter(id);
 		return ResponseEntity.status(HttpStatus.OK).body(livro);
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> deletar(@PathVariable("id") Long id){
-		try {
-			livrosService.deletar(id);
-		} catch (EmptyResultDataAccessException e) {
-			return ResponseEntity.notFound().build();
-		}
+		livrosService.deletar(id);
 		return ResponseEntity.noContent().build();
 	}
 	
 	@RequestMapping(value="/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> atualizar(@RequestBody Livro livro, @PathVariable("id") Long id){
 		livro.setId(id);
-		try {
-			livrosService.alterar(livro);
-		} catch (LivroNaoEncontradoException e) {
-			ResponseEntity.notFound().build();
-		}
+		livrosService.alterar(livro);
 		
 		return ResponseEntity.noContent().build();
 	}
