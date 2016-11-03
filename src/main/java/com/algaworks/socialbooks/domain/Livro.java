@@ -10,7 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -24,17 +27,21 @@ public class Livro {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@JsonInclude(Include.NON_NULL)
+	@NotEmpty(message = "O campo nome não pode ser vazio.")
 	private String nome;
 	
 	@JsonInclude(Include.NON_NULL)
-	@JsonFormat(pattern="dd/MM/yyy")
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	@NotNull(message = "Campo publicação é de preechimento obrigatório.")
 	private Date publicacao;
 	
 	@JsonInclude(Include.NON_NULL)
+	@NotNull(message = "Campo editora é de preechimento obrigatório.")
 	private String editora;
 	
 	@JsonInclude(Include.NON_NULL)
+	@NotEmpty(message = "O resumo de ver preenchido.")
+	@Size(max = 1500, message = "O resumo não pode conter mais de 1500 caracteres.")
 	private String resumo;
 	
 	@JsonInclude(Include.NON_EMPTY)
@@ -42,57 +49,70 @@ public class Livro {
 	private List<Comentario> comentarios;
 	
 	@ManyToOne
-	@JoinColumn(name="AUTOR_ID")
+	@JoinColumn(name = "AUTOR_ID")
 	@JsonInclude(Include.NON_NULL)
 	private Autor autor;
 	
-	public Livro(){}
+	public Livro() {}
 	
-	public Livro(String nome){
+	public Livro(String nome) {
 		this.nome = nome;
 	}
-	
-	
+
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 	public String getNome() {
 		return nome;
 	}
+
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+
 	public Date getPublicacao() {
 		return publicacao;
 	}
+
 	public void setPublicacao(Date publicacao) {
 		this.publicacao = publicacao;
 	}
+
 	public String getEditora() {
 		return editora;
 	}
+
 	public void setEditora(String editora) {
 		this.editora = editora;
 	}
+
 	public String getResumo() {
 		return resumo;
 	}
+
 	public void setResumo(String resumo) {
 		this.resumo = resumo;
 	}
+
 	public List<Comentario> getComentarios() {
 		return comentarios;
 	}
+
 	public void setComentarios(List<Comentario> comentarios) {
 		this.comentarios = comentarios;
 	}
+
 	public Autor getAutor() {
 		return autor;
 	}
+
 	public void setAutor(Autor autor) {
 		this.autor = autor;
 	}
+	
 }
